@@ -21,6 +21,37 @@ function Player(name, mark) {
   return { name, resetPoints, addPoint, getPoints, getMark };
 }
 
+function AI(name, mark) {
+    
+    let player = Player(name, mark);
+
+    function makeMove() {
+        return makeWinMove || makeBlockMove || makeCenterMove || makeCornerMove || makeMiddleCornerMove
+    }
+
+    function makeCenterMove() {
+        
+    }
+
+    function makeCornerMove() {
+        
+    }
+
+    function makeMiddleCornerMove() {
+        
+    }
+
+    function makeBlockMove() {
+        
+    }
+
+    function makeWinMove() {
+        
+    }
+
+    return { ...player }
+}
+
 function Gameboard() {
   let board = [
     [" ", " ", " "],
@@ -106,7 +137,7 @@ function Gameboard() {
 
 const Program = (() => {
   let playerOne = Player("player_one", "x");
-  let playerTwo = Player("player_two", "o");
+  let playerTwo = AI("player_two", "o");
 
   let board = Gameboard();
 
