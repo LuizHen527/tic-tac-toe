@@ -22,41 +22,100 @@ function Player(name, mark) {
 }
 
 function AI(name, mark) {
-    
-    let player = Player(name, mark);
+  let player = Player(name, mark);
 
-    function makeMove() {
-        return makeWinMove || makeBlockMove || makeCenterMove || makeCornerMove || makeMiddleCornerMove
+  function makeMove(board, winCombinations) {
+    return (
+      makeWinMove(board, winCombinations) ||
+      makeBlockMove(board, winCombinations) ||
+      makeCenterMove(board, winCombinations) ||
+      makeCornerMove(board, winCombinations) ||
+      makeMiddleCornerMove(board, winCombinations)
+    );
+  }
+
+  function makeCenterMove(board, winCombinations) {}
+
+  function makeCornerMove(board, winCombinations) {}
+
+  function makeMiddleCornerMove(board, winCombinations) {}
+
+  function makeBlockMove(board, winCombinations) {}
+
+  function makeWinMove(board, winCombinations) {
+    let freeCordinate;
+    let marksOnLine;
+
+    for (const combinationArray of winCombinations) {
+      freeCordinate = null;
+      marksOnLine = 0;
+
+      for (const cordenate of combinationArray) {
+        if (board[cordenate.x][cordenate.y] === "o") {
+          marksOnLine++;
+          continue;
+        } else if (board[cordenate.x][cordenate.y] === null) {
+          freeCordinate = cordenate;
+        }
+      }
+
+      if (marksOnLine === 2 && freeCordinate !== null) {
+        return freeCordinate;
+      }
     }
+  }
 
-    function makeCenterMove() {
-        
-    }
-
-    function makeCornerMove() {
-        
-    }
-
-    function makeMiddleCornerMove() {
-        
-    }
-
-    function makeBlockMove() {
-        
-    }
-
-    function makeWinMove() {
-        
-    }
-
-    return { ...player }
+  return { ...player, makeMove };
 }
 
 function Gameboard() {
   let board = [
-    [" ", " ", " "],
-    [" ", " ", " "],
-    [" ", " ", " "],
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ];
+
+  let winCordinates = [
+    [
+      { x: 2, y: 0 },
+      { x: 2, y: 1 },
+      { x: 2, y: 2 },
+    ],
+    [
+      { x: 1, y: 0 },
+      { x: 1, y: 1 },
+      { x: 1, y: 2 },
+    ],
+    [
+      { x: 0, y: 0 },
+      { x: 0, y: 1 },
+      { x: 0, y: 2 },
+    ],
+    [
+      { x: 0, y: 0 },
+      { x: 1, y: 0 },
+      { x: 2, y: 0 },
+    ],
+    [
+      { x: 0, y: 1 },
+      { x: 1, y: 1 },
+      { x: 2, y: 1 },
+    ],
+    [
+      { x: 0, y: 2 },
+      { x: 1, y: 2 },
+      { x: 2, y: 2 },
+    ],
+    [
+      { x: 0, y: 2 },
+      { x: 1, y: 1 },
+      { x: 2, y: 0 },
+    ],
+    [
+      { x: 0, y: 0 },
+      { x: 1, y: 1 },
+      { x: 2, y: 2 },
+    ],
   ];
 
   function getBoard() {
@@ -76,50 +135,34 @@ function Gameboard() {
   }
 
   function checkForWinner() {
-
-    winCordinates = [
-        [{ x: 2, y: 0 }, { x: 2, y: 1 }, { x: 2, y: 2 },],
-        [{ x: 1, y: 0 }, { x: 1, y: 1 }, { x: 1, y: 2 },],
-        [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 },],
-        [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 },],
-        [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 },],
-        [{ x: 0, y: 2 }, { x: 1, y: 2 }, { x: 2, y: 2 },],
-        [{ x: 0, y: 2 }, { x: 1, y: 1 }, { x: 2, y: 0 },],
-        [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 2 },],
-    ];
-
     for (const combinationArray of winCordinates) {
+      let allEqualX = true;
+      let allEqualO = true;
 
-        let allEqualX = true;
-        let allEqualO = true;
-
-        for (const cordenate of combinationArray) {
-
-            if (board[cordenate.x][cordenate.y] !== "x") {
-                allEqualX = false;
-                break;
-            }
+      for (const cordenate of combinationArray) {
+        if (board[cordenate.x][cordenate.y] !== "x") {
+          allEqualX = false;
+          break;
         }
-        
-        for (const cordenate of combinationArray) {
+      }
 
-            if (board[cordenate.x][cordenate.y] !== "o") {
-                allEqualO = false;
-                break;
-            }
+      for (const cordenate of combinationArray) {
+        if (board[cordenate.x][cordenate.y] !== "o") {
+          allEqualO = false;
+          break;
         }
+      }
 
-        if (allEqualX) {
-            return "player_one won"
-        }
+      if (allEqualX) {
+        return "player_one won";
+      }
 
-        if (allEqualO) {
-            return "player_two won"
-        }
+      if (allEqualO) {
+        return "player_two won";
+      }
     }
 
     return false;
-    
   }
 
   function toString() {
@@ -132,6 +175,7 @@ function Gameboard() {
     putMark,
     toString,
     checkForWinner,
+    winCordinates,
   };
 }
 
@@ -144,22 +188,21 @@ const Program = (() => {
   function checkGame() {
     //Check board
     //Check player points
-    let winner = board.checkForWinner()
+    let winner = board.checkForWinner();
 
     if (winner === "player_one won") {
-        console.log("player_one won");
+      console.log("player_one won");
 
-        playerOne.addPoint();
-        
-        board.resetBoard()
+      playerOne.addPoint();
+
+      board.resetBoard();
     } else if (winner === "player_two won") {
-        console.log("player_two won");
+      console.log("player_two won");
 
-        playerTwo.addPoint();
+      playerTwo.addPoint();
 
-        board.resetBoard();
+      board.resetBoard();
     }
-
   }
 
   function gameLoop() {
