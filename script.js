@@ -44,6 +44,53 @@ function Gameboard() {
     board[placeX][placeY] = player.getMark();
   }
 
+  function checkForWinner() {
+
+    winCordinates = [
+        [{ x: 2, y: 0 }, { x: 2, y: 1 }, { x: 2, y: 2 },],
+        [{ x: 1, y: 0 }, { x: 1, y: 1 }, { x: 1, y: 2 },],
+        [{ x: 0, y: 0 }, { x: 0, y: 1 }, { x: 0, y: 2 },],
+        [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 },],
+        [{ x: 0, y: 1 }, { x: 1, y: 1 }, { x: 2, y: 1 },],
+        [{ x: 0, y: 2 }, { x: 1, y: 2 }, { x: 2, y: 2 },],
+        [{ x: 0, y: 2 }, { x: 1, y: 1 }, { x: 2, y: 0 },],
+        [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 2 },],
+    ];
+
+    for (const combinationArray of winCordinates) {
+
+        let allEqualX = true;
+        let allEqualO = true;
+
+        for (const cordenate of combinationArray) {
+
+            if (board[cordenate.x][cordenate.y] !== "x") {
+                allEqualX = false;
+                break;
+            }
+        }
+        
+        for (const cordenate of combinationArray) {
+
+            if (board[cordenate.x][cordenate.y] !== "o") {
+                allEqualO = false;
+                break;
+            }
+        }
+
+        if (allEqualX) {
+            return "player_one won"
+        }
+
+        if (allEqualO) {
+            return "player_two won"
+        }
+    }
+
+    return false;
+    
+  }
+
   function toString() {
     return `${board[0]}\n${board[1]}\n${board[2]}`;
   }
@@ -53,6 +100,7 @@ function Gameboard() {
     resetBoard,
     putMark,
     toString,
+    checkForWinner,
   };
 }
 
@@ -61,6 +109,27 @@ const Program = (() => {
   let playerTwo = Player("player_two", "o");
 
   let board = Gameboard();
+
+  function checkGame() {
+    //Check board
+    //Check player points
+    let winner = board.checkForWinner()
+
+    if (winner === "player_one won") {
+        console.log("player_one won");
+
+        playerOne.addPoint();
+        
+        board.resetBoard()
+    } else if (winner === "player_two won") {
+        console.log("player_two won");
+
+        playerTwo.addPoint();
+
+        board.resetBoard();
+    }
+
+  }
 
   function gameLoop() {
     let marks = [
@@ -79,8 +148,11 @@ const Program = (() => {
       } else {
         board.putMark(playerTwo, mark.x, mark.y);
       }
+
       console.log("-----------------");
       console.log(board + "");
+
+      checkGame();
     }
 
     // while (true) {
