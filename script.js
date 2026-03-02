@@ -58,7 +58,6 @@ function AI(name, mark) {
 
         if (board[cordenate.x][cordenate.y] === "o") {
           aiMarksOnLine++;
-          continue;
         } else if (board[cordenate.x][cordenate.y] === null) {
           freeCordinate = cordenate;
         }
@@ -224,7 +223,7 @@ const Program = (() => {
   function gameLoop() {
     let marks = [
       { x: 0, y: 0, player: "player_two" },
-      { x: 2, y: 2, player: "player_two" },
+      { x: 0, y: 2, player: "player_two" },
       { x: 1, y: 0, player: "player_one" },
       { x: 2, y: 0, player: "player_one" },
     ];
