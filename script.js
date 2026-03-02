@@ -44,25 +44,32 @@ function AI(name, mark) {
 
   function makeWinMove(board, winCombinations) {
     let freeCordinate;
-    let marksOnLine;
+    let aiMarksOnLine;
 
     for (const combinationArray of winCombinations) {
       freeCordinate = null;
-      marksOnLine = 0;
+      aiMarksOnLine = 0;
+      console.log(board);
+
+      console.log("---------------");
 
       for (const cordenate of combinationArray) {
+        console.log(board[cordenate.x][cordenate.y]);
+
         if (board[cordenate.x][cordenate.y] === "o") {
-          marksOnLine++;
+          aiMarksOnLine++;
           continue;
         } else if (board[cordenate.x][cordenate.y] === null) {
           freeCordinate = cordenate;
         }
-      }
 
-      if (marksOnLine === 2 && freeCordinate !== null) {
-        return freeCordinate;
+        if (aiMarksOnLine === 2 && freeCordinate !== null) {
+          return freeCordinate;
+        }
       }
     }
+
+    return false;
   }
 
   return { ...player, makeMove };
@@ -134,6 +141,14 @@ function Gameboard() {
     board[placeX][placeY] = player.getMark();
   }
 
+  function putMarkAI(player, board, winCombinations) {
+    cordenates = player.makeMove(board, winCombinations);
+
+    console.log("Ai cordinates: " + cordenates);
+
+    board[cordenates.x][cordenates.y] = "o";
+  }
+
   function checkForWinner() {
     for (const combinationArray of winCordinates) {
       let allEqualX = true;
@@ -176,6 +191,7 @@ function Gameboard() {
     toString,
     checkForWinner,
     winCordinates,
+    putMarkAI,
   };
 }
 
@@ -207,14 +223,14 @@ const Program = (() => {
 
   function gameLoop() {
     let marks = [
-      { x: 0, y: 0, player: "player_one" },
-      { x: 0, y: 1, player: "player_two" },
-      { x: 1, y: 1, player: "player_one" },
-      { x: 0, y: 2, player: "player_two" },
-      { x: 2, y: 2, player: "player_one" },
-      { x: 2, y: 0, player: "player_two" },
-      { x: 2, y: 1, player: "player_one" },
+      { x: 0, y: 0, player: "player_two" },
+      { x: 2, y: 2, player: "player_two" },
+      { x: 1, y: 0, player: "player_one" },
+      { x: 2, y: 0, player: "player_one" },
     ];
+
+    console.log("-----------------");
+    console.log(board + "");
 
     for (const mark of marks) {
       if (mark.player == "player_one") {
@@ -228,6 +244,11 @@ const Program = (() => {
 
       checkGame();
     }
+
+    board.putMarkAI(playerTwo, board.getBoard(), board.winCordinates);
+
+    console.log("-----------------");
+    console.log(board + "");
 
     // while (true) {
     //     board.putMark(playerOne, 0, 0);
