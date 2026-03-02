@@ -28,19 +28,36 @@ function AI(name, mark) {
     return (
       makeWinMove(board, winCombinations) ||
       makeBlockMove(board, winCombinations) ||
-      makeCenterMove(board, winCombinations) ||
+      makeCenterMove(board) ||
       makeCornerMove(board, winCombinations) ||
       makeMiddleCornerMove(board, winCombinations)
     );
   }
 
-  function makeCornerMove(board, winCombinations) {}
+  
 
-  function makeMiddleCornerMove(board, winCombinations) {
+  function makeMiddleCornerMove(board) {
+    let middleCorners = [
+      { x: 1, y: 0 },
+      { x: 2, y: 1 },
+      { x: 1, y: 2 },
+      { x: 0, y: 1 },
+    ]
+
+    for (const place of middleCorners) {
+      if (board[place.x][place.y] === null) {
+        return place;
+      }
+    }
+
+    return false;
+  }
+
+  function makeCornerMove(board) {
 
   }
 
-  function makeCenterMove(board, winCombinations) {
+  function makeCenterMove(board) {
     if (board[1][1] === null) {
       return { x: 1, y: 1};
     }
