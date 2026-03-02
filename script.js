@@ -85,7 +85,6 @@ function AI(name, mark) {
       aiMarksOnLine = 0;
 
       for (const cordenate of combinationArray) {
-
         if (board[cordenate.x][cordenate.y] === "x") {
           aiMarksOnLine++;
         } else if (board[cordenate.x][cordenate.y] === null) {
@@ -110,7 +109,6 @@ function AI(name, mark) {
       aiMarksOnLine = 0;
 
       for (const cordenate of combinationArray) {
-
         if (board[cordenate.x][cordenate.y] === "o") {
           aiMarksOnLine++;
         } else if (board[cordenate.x][cordenate.y] === null) {
@@ -238,7 +236,7 @@ function Gameboard() {
     if (!haveNull) {
       return "tie";
     }
-    
+
     return false;
   }
 
@@ -257,9 +255,45 @@ function Gameboard() {
   };
 }
 
+function BoardRender() {
+  const grid = [
+    document.getElementById("0-0"),
+    document.getElementById("0-1"),
+    document.getElementById("0-2"),
+    document.getElementById("1-0"),
+    document.getElementById("1-1"),
+    document.getElementById("1-2"),
+    document.getElementById("2-0"),
+    document.getElementById("2-1"),
+    document.getElementById("2-2"),
+  ];
+
+  function showBoard(board) {
+    for (const cell of grid) {
+      const cordenates = cell.id.split("-");
+
+      console.log(board[cordenates[0]][cordenates[1]]);
+      if (board[cordenates[0]][cordenates[1]] === "x") {
+        cell.classList = "x-simbol";
+        cell.src = "./assets/x-simbol.svg";
+
+      } else if (board[cordenates[0]][cordenates[1]] === "o") {
+        cell.classList = "o-simbol";
+        cell.src = "./assets/circle.svg";
+
+      }
+      
+    }
+  }
+
+  return { showBoard };
+}
+
 const Program = (() => {
   let playerOne = Player("player_one", "x");
   let playerTwo = AI("player_two", "o");
+  let firstPlayer = "player_one";
+  let render = BoardRender();
 
   let board = Gameboard();
 
@@ -283,7 +317,6 @@ const Program = (() => {
     } else if (winner === "tie") {
       console.log("tie");
 
-      board.resetBoard();
     }
   }
 
@@ -325,6 +358,8 @@ const Program = (() => {
     //     board.putMark(playerOne, 0, 0);
     //     console.log(board.getBoard());
     // }
+
+    render.showBoard(board.getBoard());
   }
 
   return gameLoop();
