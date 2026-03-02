@@ -40,9 +40,7 @@ function AI(name, mark) {
 
   function makeMiddleCornerMove(board, winCombinations) {}
 
-  function makeBlockMove(board, winCombinations) {}
-
-  function makeWinMove(board, winCombinations) {
+  function makeBlockMove(board, winCombinations) {
     let freeCordinate;
     let aiMarksOnLine;
 
@@ -52,6 +50,32 @@ function AI(name, mark) {
       console.log(board);
 
       console.log("---------------");
+
+      for (const cordenate of combinationArray) {
+        console.log(board[cordenate.x][cordenate.y]);
+
+        if (board[cordenate.x][cordenate.y] === "x") {
+          aiMarksOnLine++;
+        } else if (board[cordenate.x][cordenate.y] === null) {
+          freeCordinate = cordenate;
+        }
+
+        if (aiMarksOnLine === 2 && freeCordinate !== null) {
+          return freeCordinate;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  function makeWinMove(board, winCombinations) {
+    let freeCordinate;
+    let aiMarksOnLine;
+
+    for (const combinationArray of winCombinations) {
+      freeCordinate = null;
+      aiMarksOnLine = 0;
 
       for (const cordenate of combinationArray) {
         console.log(board[cordenate.x][cordenate.y]);
@@ -222,10 +246,9 @@ const Program = (() => {
 
   function gameLoop() {
     let marks = [
-      { x: 0, y: 0, player: "player_two" },
       { x: 0, y: 2, player: "player_two" },
-      { x: 1, y: 0, player: "player_one" },
-      { x: 2, y: 0, player: "player_one" },
+      { x: 0, y: 0, player: "player_one" },
+      { x: 2, y: 2, player: "player_one" },
     ];
 
     console.log("-----------------");
