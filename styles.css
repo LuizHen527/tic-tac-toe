@@ -1,0 +1,48 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+    width: 90%;
+    margin: 0 auto;
+    height: 500px;
+    display: flex;
+    align-items: center;
+}
+
+.board {
+    display: grid;
+    grid-template-rows: repeat(3, 150px);
+    grid-template-columns: repeat(3, 160px);
+    min-width: 30rem;
+    margin: 0 auto;
+    column-gap: 10px;
+    row-gap: 10px;
+}
+
+.board__cell {
+    background-color: aquamarine;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.board__cell:hover {
+    cursor: pointer;
+}
+
+.img-svg {
+}
+
+.x-simbol {
+    width: 65%;
+}
+
+.o-simbol {
+    width: 95%;
+}
