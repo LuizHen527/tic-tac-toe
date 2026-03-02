@@ -34,15 +34,13 @@ function AI(name, mark) {
     );
   }
 
-  
-
   function makeMiddleCornerMove(board) {
     let middleCorners = [
       { x: 1, y: 0 },
       { x: 2, y: 1 },
       { x: 1, y: 2 },
       { x: 0, y: 1 },
-    ]
+    ];
 
     for (const place of middleCorners) {
       if (board[place.x][place.y] === null) {
@@ -54,15 +52,28 @@ function AI(name, mark) {
   }
 
   function makeCornerMove(board) {
+    let middleCorners = [
+      { x: 0, y: 0 },
+      { x: 0, y: 2 },
+      { x: 2, y: 2 },
+      { x: 2, y: 0 },
+    ];
 
+    for (const place of middleCorners) {
+      if (board[place.x][place.y] === null) {
+        return place;
+      }
+    }
+
+    return false;
   }
 
   function makeCenterMove(board) {
     if (board[1][1] === null) {
-      return { x: 1, y: 1};
+      return { x: 1, y: 1 };
     }
 
-    return false
+    return false;
   }
 
   function makeBlockMove(board, winCombinations) {
@@ -270,9 +281,7 @@ const Program = (() => {
   }
 
   function gameLoop() {
-    let marks = [
-      { x: 0, y: 0, player: "player_one" },
-    ];
+    let marks = [{ x: 0, y: 0, player: "player_one" }];
 
     console.log("-----------------");
     console.log(board + "");
