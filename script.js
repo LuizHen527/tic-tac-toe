@@ -83,12 +83,8 @@ function AI(name, mark) {
     for (const combinationArray of winCombinations) {
       freeCordinate = null;
       aiMarksOnLine = 0;
-      console.log(board);
-
-      console.log("---------------");
 
       for (const cordenate of combinationArray) {
-        console.log(board[cordenate.x][cordenate.y]);
 
         if (board[cordenate.x][cordenate.y] === "x") {
           aiMarksOnLine++;
@@ -114,7 +110,6 @@ function AI(name, mark) {
       aiMarksOnLine = 0;
 
       for (const cordenate of combinationArray) {
-        console.log(board[cordenate.x][cordenate.y]);
 
         if (board[cordenate.x][cordenate.y] === "o") {
           aiMarksOnLine++;
@@ -202,13 +197,11 @@ function Gameboard() {
 
   function putMarkAI(player, board, winCombinations) {
     cordenates = player.makeMove(board, winCombinations);
-
-    console.log("Ai cordinates: " + cordenates);
-
-    board[cordenates.x][cordenates.y] = "o";
   }
 
   function checkForWinner() {
+    let haveNull = false;
+
     for (const combinationArray of winCordinates) {
       let allEqualX = true;
       let allEqualO = true;
@@ -229,13 +222,23 @@ function Gameboard() {
 
       if (allEqualX) {
         return "player_one won";
-      }
-
-      if (allEqualO) {
+      } else if (allEqualO) {
         return "player_two won";
       }
     }
 
+    for (const line of board) {
+      for (const cell of line) {
+        if (cell === null) {
+          haveNull = true;
+        }
+      }
+    }
+
+    if (!haveNull) {
+      return "tie";
+    }
+    
     return false;
   }
 
@@ -277,11 +280,25 @@ const Program = (() => {
       playerTwo.addPoint();
 
       board.resetBoard();
+    } else if (winner === "tie") {
+      console.log("tie");
+
+      board.resetBoard();
     }
   }
 
   function gameLoop() {
-    let marks = [{ x: 0, y: 0, player: "player_one" }];
+    let marks = [
+      { x: 0, y: 0, player: "player_one" },
+      { x: 0, y: 1, player: "player_two" },
+      { x: 0, y: 2, player: "player_one" },
+      { x: 1, y: 0, player: "player_one" },
+      { x: 1, y: 1, player: "player_two" },
+      { x: 1, y: 2, player: "player_two" },
+      { x: 2, y: 0, player: "player_two" },
+      { x: 2, y: 1, player: "player_one" },
+      { x: 2, y: 2, player: "player_two" },
+    ];
 
     console.log("-----------------");
     console.log(board + "");
