@@ -332,6 +332,8 @@ const Program = (() => {
 
       console.log(board.getBoard());
 
+      firstPlayer = "player_one";
+
       return "player_one won";
     } else if (winner === "player_two won") {
       playerTwo.addPoint();
@@ -339,6 +341,8 @@ const Program = (() => {
       board.resetBoard();
 
       render.showBoard(board.getBoard());
+
+      firstPlayer = "player_two";
 
       return "player_two won";
     } else if (winner === "tie") {
@@ -373,6 +377,7 @@ const Program = (() => {
       render.showBoard(board.getBoard());
 
       checkGame();
+
     }
 
     //render.showBoard(board.getBoard());
