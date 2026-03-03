@@ -189,7 +189,6 @@ function Gameboard() {
     ];
 
     console.log(board);
-    
   }
 
   function putMark(player, placeX, placeY) {
@@ -199,8 +198,7 @@ function Gameboard() {
   function putMarkAI(player, board, winCombinations) {
     cordenates = player.makeMove(board, winCombinations);
 
-    board[cordenates.x][cordenates.y] = player.getMark()
-    
+    board[cordenates.x][cordenates.y] = player.getMark();
   }
 
   function checkForWinner() {
@@ -274,45 +272,29 @@ function BoardRender() {
     document.getElementById("2-2"),
   ];
 
-
-  
-
   function showBoard(board) {
     for (const cell of grid) {
       const cordenates = cell.id.split("-");
 
-      
-
       if (board[cordenates[0]][cordenates[1]] === "x") {
-
         for (const node of cell.childNodes) {
-
           if (node.tagName === "IMG") {
             node.classList = "x-simbol";
             node.src = "./assets/x-simbol.svg";
-            
           }
         }
-
       } else if (board[cordenates[0]][cordenates[1]] === "o") {
-
         for (const node of cell.childNodes) {
-
           if (node.tagName === "IMG") {
             node.classList = "o-simbol";
             node.src = "./assets/circle.svg";
-            
           }
         }
-
       } else if (board[cordenates[0]][cordenates[1]] === null) {
-        
         for (const node of cell.childNodes) {
-
           if (node.tagName === "IMG") {
             node.classList = "";
             node.src = "";
-            
           }
         }
       }
@@ -329,13 +311,10 @@ const Program = (() => {
   let render = BoardRender();
 
   for (const element of render.grid) {
-    
     element.addEventListener("click", () => {
       gameLoop(element.id);
-
-    })
+    });
   }
-
 
   let board = Gameboard();
 
@@ -345,7 +324,6 @@ const Program = (() => {
     let winner = board.checkForWinner();
 
     if (winner === "player_one won") {
-
       playerOne.addPoint();
 
       board.resetBoard();
@@ -355,9 +333,7 @@ const Program = (() => {
       console.log(board.getBoard());
 
       return "player_one won";
-      
     } else if (winner === "player_two won") {
-
       playerTwo.addPoint();
 
       board.resetBoard();
@@ -366,13 +342,11 @@ const Program = (() => {
 
       return "player_two won";
     } else if (winner === "tie") {
-
       board.resetBoard();
 
       render.showBoard(board.getBoard());
 
       return "tie";
-
     }
   }
 
@@ -382,14 +356,11 @@ const Program = (() => {
     }
   }
 
-
-
   function gameLoop(id) {
-
     const xPoint = id.split("-")[0];
     const yPoint = id.split("-")[1];
     let gameSituation = "";
-    
+
     board.putMark(playerOne, xPoint, yPoint);
 
     render.showBoard(board.getBoard());
@@ -404,9 +375,6 @@ const Program = (() => {
       checkGame();
     }
 
-    
-
     //render.showBoard(board.getBoard());
   }
-
 })();
