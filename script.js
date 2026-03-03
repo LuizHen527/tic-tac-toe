@@ -187,6 +187,9 @@ function Gameboard() {
       [null, null, null],
       [null, null, null],
     ];
+
+    console.log(board);
+    
   }
 
   function putMark(player, placeX, placeY) {
@@ -195,6 +198,9 @@ function Gameboard() {
 
   function putMarkAI(player, board, winCombinations) {
     cordenates = player.makeMove(board, winCombinations);
+
+    board[cordenates.x][cordenates.y] = player.getMark()
+    
   }
 
   function checkForWinner() {
@@ -293,12 +299,22 @@ function BoardRender() {
         for (const node of cell.childNodes) {
 
           if (node.tagName === "IMG") {
-            node.classList = "x-simbol";
-            node.src = "./assets/x-simbol.svg";
+            node.classList = "o-simbol";
+            node.src = "./assets/circle.svg";
             
           }
         }
 
+      } else if (board[cordenates[0]][cordenates[1]] === null) {
+        
+        for (const node of cell.childNodes) {
+
+          if (node.tagName === "IMG") {
+            node.classList = "";
+            node.src = "";
+            
+          }
+        }
       }
     }
   }
@@ -329,19 +345,33 @@ const Program = (() => {
     let winner = board.checkForWinner();
 
     if (winner === "player_one won") {
-      console.log("player_one won");
 
       playerOne.addPoint();
 
       board.resetBoard();
+
+      render.showBoard(board.getBoard());
+
+      console.log(board.getBoard());
+
+      return "player_one won";
+      
     } else if (winner === "player_two won") {
-      console.log("player_two won");
 
       playerTwo.addPoint();
 
       board.resetBoard();
+
+      render.showBoard(board.getBoard());
+
+      return "player_two won";
     } else if (winner === "tie") {
-      console.log("tie");
+
+      board.resetBoard();
+
+      render.showBoard(board.getBoard());
+
+      return "tie";
 
     }
   }
@@ -356,14 +386,25 @@ const Program = (() => {
 
   function gameLoop(id) {
 
-    const xPoint = id.split("-")[0]
-    const yPoint = id.split("-")[1]
+    const xPoint = id.split("-")[0];
+    const yPoint = id.split("-")[1];
+    let gameSituation = "";
     
     board.putMark(playerOne, xPoint, yPoint);
 
     render.showBoard(board.getBoard());
 
-    board.putMarkAI(playerTwo, board.getBoard(), board.winCordinates);
+    gameSituation = checkGame();
+
+    if (gameSituation !== "player_one won") {
+      board.putMarkAI(playerTwo, board.getBoard(), board.winCordinates);
+
+      render.showBoard(board.getBoard());
+
+      checkGame();
+    }
+
+    
 
     //render.showBoard(board.getBoard());
   }
