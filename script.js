@@ -268,25 +268,42 @@ function BoardRender() {
     document.getElementById("2-2"),
   ];
 
+
+  
+
   function showBoard(board) {
     for (const cell of grid) {
       const cordenates = cell.id.split("-");
 
-      console.log(board[cordenates[0]][cordenates[1]]);
+      
+
       if (board[cordenates[0]][cordenates[1]] === "x") {
-        cell.classList = "x-simbol";
-        cell.src = "./assets/x-simbol.svg";
+
+        for (const node of cell.childNodes) {
+
+          if (node.tagName === "IMG") {
+            node.classList = "x-simbol";
+            node.src = "./assets/x-simbol.svg";
+            
+          }
+        }
 
       } else if (board[cordenates[0]][cordenates[1]] === "o") {
-        cell.classList = "o-simbol";
-        cell.src = "./assets/circle.svg";
+
+        for (const node of cell.childNodes) {
+
+          if (node.tagName === "IMG") {
+            node.classList = "x-simbol";
+            node.src = "./assets/x-simbol.svg";
+            
+          }
+        }
 
       }
-      
     }
   }
 
-  return { showBoard };
+  return { showBoard, grid };
 }
 
 const Program = (() => {
@@ -294,6 +311,15 @@ const Program = (() => {
   let playerTwo = AI("player_two", "o");
   let firstPlayer = "player_one";
   let render = BoardRender();
+
+  for (const element of render.grid) {
+    
+    element.addEventListener("click", () => {
+      gameLoop(element.id);
+
+    })
+  }
+
 
   let board = Gameboard();
 
@@ -320,47 +346,26 @@ const Program = (() => {
     }
   }
 
-  function gameLoop() {
-    let marks = [
-      { x: 0, y: 0, player: "player_one" },
-      { x: 0, y: 1, player: "player_two" },
-      { x: 0, y: 2, player: "player_one" },
-      { x: 1, y: 0, player: "player_one" },
-      { x: 1, y: 1, player: "player_two" },
-      { x: 1, y: 2, player: "player_two" },
-      { x: 2, y: 0, player: "player_two" },
-      { x: 2, y: 1, player: "player_one" },
-      { x: 2, y: 2, player: "player_two" },
-    ];
-
-    console.log("-----------------");
-    console.log(board + "");
-
-    for (const mark of marks) {
-      if (mark.player == "player_one") {
-        board.putMark(playerOne, mark.x, mark.y);
-      } else {
-        board.putMark(playerTwo, mark.x, mark.y);
-      }
-
-      console.log("-----------------");
-      console.log(board + "");
-
-      checkGame();
+  function startRound() {
+    if (firstPlayer === "player_two") {
+      board.putMarkAI(playerTwo, board.getBoard(), board.winCordinates);
     }
+  }
+
+
+
+  function gameLoop(id) {
+
+    const xPoint = id.split("-")[0]
+    const yPoint = id.split("-")[1]
+    
+    board.putMark(playerOne, xPoint, yPoint);
+
+    render.showBoard(board.getBoard());
 
     board.putMarkAI(playerTwo, board.getBoard(), board.winCordinates);
 
-    console.log("-----------------");
-    console.log(board + "");
-
-    // while (true) {
-    //     board.putMark(playerOne, 0, 0);
-    //     console.log(board.getBoard());
-    // }
-
-    render.showBoard(board.getBoard());
+    //render.showBoard(board.getBoard());
   }
 
-  return gameLoop();
 })();
