@@ -1,13 +1,23 @@
-function Player(name, mark) {
+function Player(name, mark, idPointsElement) {
   let points = 0;
   let markString = mark;
+  
+  let idElementPoints = idPointsElement;
 
   function resetPoints() {
     points = 0;
   }
 
   function addPoint() {
-    points = +1;
+    
+    const pointsElement =  document.getElementById(`${idElementPoints}`);
+
+    console.log(pointsElement);
+    
+
+    points += 1;
+
+    pointsElement.textContent = `Points: ${getPoints()}`;
   }
 
   function getPoints() {
@@ -21,8 +31,8 @@ function Player(name, mark) {
   return { name, resetPoints, addPoint, getPoints, getMark };
 }
 
-function AI(name, mark) {
-  let player = Player(name, mark);
+function AI(name, mark, idPointsElement) {
+  let player = Player(name, mark, idPointsElement);
 
   function makeMove(board, winCombinations) {
     return (
@@ -305,8 +315,8 @@ function BoardRender() {
 }
 
 const Program = (() => {
-  let playerOne = Player("player_one", "x");
-  let playerTwo = AI("player_two", "o");
+  let playerOne = Player("player_one", "x", "points-player");
+  let playerTwo = AI("player_two", "o", "points-ai");
   let firstPlayer = "player_one";
   let render = BoardRender();
 
