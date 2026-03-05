@@ -1,7 +1,7 @@
 function Player(name, mark, idPointsElement) {
   let points = 0;
   let markString = mark;
-  
+
   let idElementPoints = idPointsElement;
 
   function resetPoints() {
@@ -9,11 +9,7 @@ function Player(name, mark, idPointsElement) {
   }
 
   function addPoint() {
-    
-    const pointsElement =  document.getElementById(`${idElementPoints}`);
-
-    console.log(pointsElement);
-    
+    const pointsElement = document.getElementById(`${idElementPoints}`);
 
     points += 1;
 
@@ -197,8 +193,6 @@ function Gameboard() {
       [null, null, null],
       [null, null, null],
     ];
-
-    console.log(board);
   }
 
   function putMark(player, placeX, placeY) {
@@ -328,7 +322,7 @@ const Program = (() => {
 
   let board = Gameboard();
 
-  function checkGame() {
+  async function checkGame() {
     //Check board
     //Check player points
     let winner = board.checkForWinner();
@@ -336,23 +330,33 @@ const Program = (() => {
     if (winner === "player_one won") {
       playerOne.addPoint();
 
+      showMessage("You win", "green");
+
+      await delay(2000)
+
       board.resetBoard();
 
       render.showBoard(board.getBoard());
 
-      console.log(board.getBoard());
-
       firstPlayer = "player_one";
+
+      showMessage("Your turn...");
 
       return "player_one won";
     } else if (winner === "player_two won") {
       playerTwo.addPoint();
+
+      showMessage("AI win", "red");
+
+      await delay(2000);
 
       board.resetBoard();
 
       render.showBoard(board.getBoard());
 
       firstPlayer = "player_two";
+
+      showMessage("Your turn...");
 
       return "player_two won";
     } else if (winner === "tie") {
@@ -370,7 +374,29 @@ const Program = (() => {
     }
   }
 
-  function gameLoop(id) {
+  function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  function showMessage(message, color) {
+    const statusPara = document.getElementById("game-status");
+
+    statusPara.textContent = message;
+
+    if (color) {
+      statusPara.setAttribute("style", `color: ${color};`);
+    } else {
+      statusPara.setAttribute("style", `color: black;`);
+    }
+  }
+
+  function getRandomInt(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+  }
+
+  async function gameLoop(id) {
     const xPoint = id.split("-")[0];
     const yPoint = id.split("-")[1];
     let gameSituation = "";
@@ -379,15 +405,20 @@ const Program = (() => {
 
     render.showBoard(board.getBoard());
 
-    gameSituation = checkGame();
+    gameSituation = await checkGame();
 
     if (gameSituation !== "player_one won") {
+      showMessage("AI is making a move...");
+
+      await delay(getRandomInt(500, 1500));
+
       board.putMarkAI(playerTwo, board.getBoard(), board.winCordinates);
 
       render.showBoard(board.getBoard());
 
-      checkGame();
+      showMessage("Your turn...");
 
+      checkGame();
     }
 
     //render.showBoard(board.getBoard());
