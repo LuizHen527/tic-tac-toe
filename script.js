@@ -196,7 +196,12 @@ function Gameboard() {
   }
 
   function putMark(player, placeX, placeY) {
-    board[placeX][placeY] = player.getMark();
+    if (board[placeX][placeY] === null) {
+      board[placeX][placeY] = player.getMark();
+      return true;
+    }
+
+    return false;
   }
 
   function putMarkAI(player, board, winCombinations) {
@@ -313,10 +318,11 @@ const Program = (() => {
   let playerTwo = AI("player_two", "o", "points-ai");
   let firstPlayer = "player_one";
   let render = BoardRender();
+  let canMakeMove = true;
 
   for (const element of render.grid) {
     element.addEventListener("click", () => {
-      gameLoop(element.id);
+      handlePlayerInput(element.id);
     });
   }
 
@@ -401,7 +407,11 @@ const Program = (() => {
     const yPoint = id.split("-")[1];
     let gameSituation = "";
 
-    board.putMark(playerOne, xPoint, yPoint);
+    if (!board.putMark(playerOne, xPoint, yPoint)) {
+      return "there is a mark on the spot"
+    }
+
+    canMakeMove = false;
 
     render.showBoard(board.getBoard());
 
@@ -418,9 +428,19 @@ const Program = (() => {
 
       showMessage("Your turn...");
 
-      checkGame();
+      await checkGame();
     }
+
+    canMakeMove = true;
 
     //render.showBoard(board.getBoard());
   }
+
+  function handlePlayerInput(id) {
+    if (canMakeMove) {
+      gameLoop(id);
+    }
+  }
+
+
 })();
