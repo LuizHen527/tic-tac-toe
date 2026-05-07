@@ -368,9 +368,11 @@ const Program = (() => {
     } else if (winner === "tie") {
       board.resetBoard();
 
+      showMessage("Tie");
+
       render.showBoard(board.getBoard());
 
-      return "tie";
+      return firstPlayer;
     }
   }
 
