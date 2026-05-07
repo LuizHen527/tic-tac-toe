@@ -396,7 +396,7 @@ const Program = (() => {
     } else {
       statusPara.setAttribute("style", `color: black;`);
     }
-  }
+  } 
 
   function getRandomInt(min, max) {
     const minCeiled = Math.ceil(min);
